@@ -1,0 +1,6 @@
+steam-client:
+  username: ""
+  password: ""
+logging:
+  level:
+    com.avenga.steamclient: debug
