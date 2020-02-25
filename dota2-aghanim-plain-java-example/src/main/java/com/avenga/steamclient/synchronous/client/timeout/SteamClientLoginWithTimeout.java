@@ -1,4 +1,4 @@
-package com.avenga.steamclient.client.timeout;
+package com.avenga.steamclient.synchronous.client.timeout;
 
 import com.avenga.steamclient.exception.CallbackTimeoutException;
 import com.avenga.steamclient.steam.client.SteamClient;
@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
  * to {@link SteamClient} callback queue and respective handlers will wait until message from Steam server will be received
  * or time for waiting callback exceed and handler will throw {@link CallbackTimeoutException}.
  */
-public class SteamClientLogin {
+public class SteamClientLoginWithTimeout {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SteamClientLogin.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SteamClientLoginWithTimeout.class);
 
     private static final long WAIT_CALLBACK_TIMEOUT = 10000;
 
@@ -46,7 +46,7 @@ public class SteamClientLogin {
             logOnResponse = steamUser.logOn(logOnDetails, WAIT_CALLBACK_TIMEOUT);
             LOGGER.info("Status of the logOn request: {}", logOnResponse.getResult().name());
         } catch (final CallbackTimeoutException e) {
-            LOGGER.info("LogOn response wasn't received during specified time.");
+            LOGGER.info("LogOn response wasn't received: {}", e.getMessage());
             //We can use retry logic here, but for now we will just disconnect and stop execution.
             steamClient.disconnect();
             return;

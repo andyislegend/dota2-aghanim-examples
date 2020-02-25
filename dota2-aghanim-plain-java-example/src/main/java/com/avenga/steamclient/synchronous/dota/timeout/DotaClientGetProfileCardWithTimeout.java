@@ -1,6 +1,6 @@
-package com.avenga.steamclient.dota.timeout;
+package com.avenga.steamclient.synchronous.dota.timeout;
 
-import com.avenga.steamclient.client.SteamClientLogin;
+import com.avenga.steamclient.synchronous.client.SteamClientLogin;
 import com.avenga.steamclient.enums.EResult;
 import com.avenga.steamclient.exception.CallbackTimeoutException;
 import com.avenga.steamclient.steam.client.SteamClient;
@@ -11,22 +11,21 @@ import com.avenga.steamclient.steam.steamuser.LogOnDetails;
 import com.avenga.steamclient.steam.steamuser.SteamUser;
 import com.avenga.steamclient.steam.steamuser.UserLogOnResponse;
 import com.avenga.steamclient.util.LoggerUtils;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Example show work of the callback handling with specified timeout for callback handling.
  * <p>
- * {@link DotaClient#getMatchDetails(long)} method during execution will register callbacks to {@link AbstractGameCoordinator}
+ * {@link DotaClient#getAccountProfileCard(int)} method during execution will register callbacks to {@link AbstractGameCoordinator}
  * callback queue and respective handlers will wait until message from Steam server will be received
  * or time for waiting callback exceed and handler will throw {@link CallbackTimeoutException}.
  */
-public class DotaClientGetMatchDetails {
+public class DotaClientGetProfileCardWithTimeout {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SteamClientLogin.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SteamClientLogin.class);
 
     private static final long WAIT_CALLBACK_TIMEOUT = 10000;
-    private static final long MATCH_ID = 5239025268L;
+    private static final int ACCOUNT_ID = 137935311;
 
     public static void main(String[] args) {
         // To check progress of the execution and sent/received packet from Steam Network we need DEBUG logger level
@@ -64,12 +63,12 @@ public class DotaClientGetMatchDetails {
         }
 
         // We need to create DOTA client to fetch data related to it from Game Coordinator server.
-        var dotaClient = new DotaClient(new GameCoordinator(steamClient));
         try {
-            var matchDetails = dotaClient.getMatchDetails(MATCH_ID, WAIT_CALLBACK_TIMEOUT);
-            LOGGER.info("Match duration time: {}", matchDetails.getMatch().getDuration());
+            var dotaClient = new DotaClient(new GameCoordinator(steamClient));
+            var profileCard = dotaClient.getAccountProfileCard(ACCOUNT_ID, WAIT_CALLBACK_TIMEOUT);
+            LOGGER.info("Profile card: {}", profileCard.getAccountId());
         } catch (final CallbackTimeoutException e) {
-            LOGGER.info("Match details response wasn't received during specified time.");
+            LOGGER.info("Account profile card response wasn't received: {}", e.getMessage());
             //We can use retry logic here, but for now we will just disconnect and stop execution.
             steamClient.disconnect();
             return;
