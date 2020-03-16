@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.avenga</groupId>
-    <artifactId>dota2-aghanim-spring-boot-example</artifactId>
+    <artifactId>dota2-aghanim-auto-reconnect-spring-boot-example</artifactId>
     <version>1.0.0</version>
-    <name>dota2-aghanim-spring-boot-example</name>
+    <name>dota2-aghanim-auto-reconnect-spring-boot-example</name>
     <description>Spring boot project with integrated steam client</description>
 
     <properties>

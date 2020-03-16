@@ -15,12 +15,14 @@ import com.avenga.steamclient.steam.asyncclient.steamgameserver.callback.GameCon
 import com.avenga.steamclient.steam.asyncclient.steamuser.SteamUserAsync;
 import com.avenga.steamclient.steam.asyncclient.steamuser.callback.LoggedOffCallback;
 import com.avenga.steamclient.steam.asyncclient.steamuser.callback.LoggedOnCallback;
-import com.avenga.steamclient.steam.steamuser.LogOnDetails;
+import com.avenga.steamclient.steam.client.steamuser.LogOnDetails;
 import com.avenga.steamclient.util.LoggerUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Example show work of the callback handling using full asynchronous {@link SteamClientAsync} and {@link DotaClientAsync}.
@@ -142,7 +144,7 @@ public class DotaClientGetMatchDetailsAsync implements Runnable {
 
         }
         System.out.println("LogOn " + username + " to Steam: " + callback.getResult());
-        gameServerAsync.sendGamePlayed(SteamGame.Dota2.getApplicationId());
+        gameServerAsync.sendGamePlayed(List.of(SteamGame.Dota2.getApplicationId()));
     }
 
     private void onLoggedOff(LoggedOffCallback callback) {

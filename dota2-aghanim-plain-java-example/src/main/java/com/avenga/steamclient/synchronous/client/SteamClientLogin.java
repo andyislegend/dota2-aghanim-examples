@@ -2,8 +2,8 @@ package com.avenga.steamclient.synchronous.client;
 
 import com.avenga.steamclient.enums.EResult;
 import com.avenga.steamclient.steam.client.SteamClient;
-import com.avenga.steamclient.steam.steamuser.LogOnDetails;
-import com.avenga.steamclient.steam.steamuser.SteamUser;
+import com.avenga.steamclient.steam.client.steamuser.LogOnDetails;
+import com.avenga.steamclient.steam.client.steamuser.SteamUser;
 import com.avenga.steamclient.util.LoggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class SteamClientLogin {
         logOnDetails.setUsername(args[0]);
         logOnDetails.setPassword(args[1]);
 
-        var steamUser = new SteamUser(steamClient);
+        var steamUser = steamClient.getHandler(SteamUser.class);
         var logOnCallback = steamUser.logOn(logOnDetails)
                 .thenApply((userLogOnResponse) -> {
                     LOGGER.info("Status of the logOn request: {}", userLogOnResponse.getResult().name());

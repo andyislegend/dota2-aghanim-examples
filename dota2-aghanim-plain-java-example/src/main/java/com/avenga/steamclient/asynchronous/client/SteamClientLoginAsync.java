@@ -8,7 +8,7 @@ import com.avenga.steamclient.steam.asyncclient.callbacks.DisconnectedCallback;
 import com.avenga.steamclient.steam.asyncclient.steamuser.SteamUserAsync;
 import com.avenga.steamclient.steam.asyncclient.steamuser.callback.LoggedOffCallback;
 import com.avenga.steamclient.steam.asyncclient.steamuser.callback.LoggedOnCallback;
-import com.avenga.steamclient.steam.steamuser.LogOnDetails;
+import com.avenga.steamclient.steam.client.steamuser.LogOnDetails;
 import com.avenga.steamclient.util.LoggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

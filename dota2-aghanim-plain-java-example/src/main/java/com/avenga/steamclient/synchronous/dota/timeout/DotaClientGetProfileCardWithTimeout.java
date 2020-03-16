@@ -1,17 +1,20 @@
 package com.avenga.steamclient.synchronous.dota.timeout;
 
+import com.avenga.steamclient.enums.SteamGame;
+import com.avenga.steamclient.steam.client.steamgamecoordinator.SteamGameCoordinator;
+import com.avenga.steamclient.steam.client.steamgamecoordinator.dota.DotaClient;
+import com.avenga.steamclient.steam.client.steamgameserver.SteamGameServer;
+import com.avenga.steamclient.steam.client.steamuser.LogOnDetails;
+import com.avenga.steamclient.steam.client.steamuser.SteamUser;
+import com.avenga.steamclient.steam.client.steamuser.UserLogOnResponse;
 import com.avenga.steamclient.synchronous.client.SteamClientLogin;
 import com.avenga.steamclient.enums.EResult;
 import com.avenga.steamclient.exception.CallbackTimeoutException;
 import com.avenga.steamclient.steam.client.SteamClient;
-import com.avenga.steamclient.steam.coordinator.AbstractGameCoordinator;
-import com.avenga.steamclient.steam.coordinator.impl.GameCoordinator;
-import com.avenga.steamclient.steam.dota.impl.DotaClient;
-import com.avenga.steamclient.steam.steamuser.LogOnDetails;
-import com.avenga.steamclient.steam.steamuser.SteamUser;
-import com.avenga.steamclient.steam.steamuser.UserLogOnResponse;
 import com.avenga.steamclient.util.LoggerUtils;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Example show work of the callback handling with specified timeout for callback handling.
@@ -45,10 +48,10 @@ public class DotaClientGetProfileCardWithTimeout {
         logOnDetails.setUsername(args[0]);
         logOnDetails.setPassword(args[1]);
 
-        var steamUser = new SteamUser(steamClient);
+        var steamUser = steamClient.getHandler(SteamUser.class);
         UserLogOnResponse logOnResponse;
         try {
-            logOnResponse = steamUser.logOn(logOnDetails, WAIT_CALLBACK_TIMEOUT);
+            logOnResponse = steamUser.logOn(logOnDetails, WAIT_CALLBACK_TIMEOUT).get();
             LOGGER.info("Status of the logOn request: {}", logOnResponse.getResult().name());
         } catch (final CallbackTimeoutException e) {
             LOGGER.info("LogOn response wasn't received during specified time.");
@@ -64,8 +67,13 @@ public class DotaClientGetProfileCardWithTimeout {
 
         // We need to create DOTA client to fetch data related to it from Game Coordinator server.
         try {
-            var dotaClient = new DotaClient(new GameCoordinator(steamClient));
-            var profileCard = dotaClient.getAccountProfileCard(ACCOUNT_ID, WAIT_CALLBACK_TIMEOUT);
+            var gameServer = steamClient.getHandler(SteamGameServer.class);
+            var dotaClient = steamClient.getHandler(SteamGameCoordinator.class).getHandler(DotaClient.class);
+
+            gameServer.setClientPlayedGame(List.of(SteamGame.Dota2.getApplicationId()), 15000L);
+            dotaClient.sendClientHello(15000L);
+
+            var profileCard = dotaClient.getAccountProfileCard(ACCOUNT_ID, WAIT_CALLBACK_TIMEOUT).get();
             LOGGER.info("Profile card: {}", profileCard.getAccountId());
         } catch (final CallbackTimeoutException e) {
             LOGGER.info("Account profile card response wasn't received: {}", e.getMessage());
