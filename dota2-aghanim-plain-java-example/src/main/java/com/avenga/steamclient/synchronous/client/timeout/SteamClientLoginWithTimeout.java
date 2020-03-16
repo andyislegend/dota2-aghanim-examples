@@ -2,9 +2,9 @@ package com.avenga.steamclient.synchronous.client.timeout;
 
 import com.avenga.steamclient.exception.CallbackTimeoutException;
 import com.avenga.steamclient.steam.client.SteamClient;
-import com.avenga.steamclient.steam.steamuser.LogOnDetails;
-import com.avenga.steamclient.steam.steamuser.SteamUser;
-import com.avenga.steamclient.steam.steamuser.UserLogOnResponse;
+import com.avenga.steamclient.steam.client.steamuser.LogOnDetails;
+import com.avenga.steamclient.steam.client.steamuser.SteamUser;
+import com.avenga.steamclient.steam.client.steamuser.UserLogOnResponse;
 import com.avenga.steamclient.util.LoggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +40,10 @@ public class SteamClientLoginWithTimeout {
         logOnDetails.setUsername(args[0]);
         logOnDetails.setPassword(args[1]);
 
-        var steamUser = new SteamUser(steamClient);
+        var steamUser = steamClient.getHandler(SteamUser.class);
         UserLogOnResponse logOnResponse;
         try {
-            logOnResponse = steamUser.logOn(logOnDetails, WAIT_CALLBACK_TIMEOUT);
+            logOnResponse = steamUser.logOn(logOnDetails, WAIT_CALLBACK_TIMEOUT).get();
             LOGGER.info("Status of the logOn request: {}", logOnResponse.getResult().name());
         } catch (final CallbackTimeoutException e) {
             LOGGER.info("LogOn response wasn't received: {}", e.getMessage());
