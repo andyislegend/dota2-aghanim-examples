@@ -1,6 +1,6 @@
 steam-client:
-  username: "bloodkill_berserker"
-  password: "Gu_902801_tS"
+  username: ${STEAM_USERNAME1}
+  password: ${STEAM_PASSWORD1}
 logging:
   level:
     com.avenga.steamclient: debug

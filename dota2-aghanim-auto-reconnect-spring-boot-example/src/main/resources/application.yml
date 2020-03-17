@@ -1,14 +1,11 @@
-steam-client:
-  username: ""
-  password: ""
 logging:
   level:
     com.avenga.steamclient: debug
 steam-multi-client:
   log-on-details:
     -
-      username: "bloodkill_berserker"
-      password: "Gu_902801_tS"
+      username: ${STEAM_USERNAME1}
+      password: ${STEAM_PASSWORD1}
     -
-      username: "bloodlast_berserker"
-      password: "Gu_902801_tS"
+      username: ${STEAM_USERNAME2}
+      password: ${STEAM_PASSWORD2}
